@@ -225,7 +225,7 @@ public class MainActivity extends Activity {
                         if(sats != null) sats.setText(msats);
                         if(stddev != null) stddev.setText(mstddev);
                         for(int i = 1; i < 11; i++) {
-                            if (tv[i] != null) tv[i].setText(map.get(tvVar[i]).toString());
+                            if (tv[i] != null) tv[i].setText(map.get(tvVar[i]));
                         }
                     }
                 });
@@ -344,7 +344,8 @@ public class MainActivity extends Activity {
         }
     }
 
-    // Implémente une moyenne mobile sur un échantillonnage donné
+    // Implémente une moyenne mobile sur un échantillon donné
+    // Calcule les valeurs min et max de l'échantillon
     private class AverageQueue {
         float total = 0;
         float avg = 0;
@@ -376,6 +377,9 @@ public class MainActivity extends Activity {
         }
 
         private void calculMinMax() {
+            min = 359; // Sinon on ne trouve pas le plus petit qui peut être 359
+            max = 0;
+            float next;
             for (Iterator<Float> i = q.iterator(); i.hasNext();) {
                 next = i.next();
                 if (next < min) min = next;
@@ -510,7 +514,7 @@ public class MainActivity extends Activity {
                         map.put("mcog", ent(items.get(8)));
                     }
 
-                } else if (ID.equals("GGA")) {// Qualité : 1 = GPS, 2 = DGPS
+                } else if (ID.equals("GGA")) {// Qualité : 1 = GPS (blanc), 2 = DGPS (vert)
                     msats = items.get(7) + " sats";
                     if (Objects.equals(items.get(6), "1")) {
                         if (GPSColor == Color.GREEN) {
