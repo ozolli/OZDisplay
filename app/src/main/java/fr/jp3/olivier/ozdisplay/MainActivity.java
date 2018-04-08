@@ -253,8 +253,8 @@ public class MainActivity extends Activity {
         rotate(imageT, mtwa);
         rotate(imageAWA, mawa);
 
-        // Mis provisoirement ici en attendant la fonction idoine
-        imageTWA.setImageTintList(ColorStateList.valueOf(Color.parseColor("#00ff00")));
+        // Colorisation TWA
+        setTWAcolor();
 
         // Dessin des laylines
         leftLLangle = mtwd + mdopt;
@@ -280,6 +280,32 @@ public class MainActivity extends Activity {
             ra.setDuration(800);
             iv.startAnimation(ra);
         }
+    }
+
+    public void setTWAcolor() {
+        int offset;
+        String teinte = "00ff00";
+        if (mtwa < 90.0 ) offset = (int) (mtwa - mdopt);
+        else offset = (int) (mdopt - mtwa);
+
+        if      (offset <= -5) teinte = "ff0000"; // rouge
+        else if (offset == -4) teinte = "cc3300";
+        else if (offset == -3) teinte = "996600";
+        else if (offset == -2) teinte = "669900";
+        else if (offset == -1) teinte = "33cc00";
+        else if (offset ==  0) teinte = "00ff00"; // vert
+        else if (offset ==  1) teinte = "00e51a";
+        else if (offset ==  2) teinte = "00cc33";
+        else if (offset ==  3) teinte = "00b24d";
+        else if (offset ==  4) teinte = "009966";
+        else if (offset ==  5) teinte = "007f80";
+        else if (offset ==  6) teinte = "006699";
+        else if (offset ==  7) teinte = "004db2";
+        else if (offset ==  8) teinte = "0033cc";
+        else if (offset ==  9) teinte = "001ae5";
+        else if (offset >= 10) teinte = "0000ff"; // bleu
+
+        imageTWA.setImageTintList(ColorStateList.valueOf(Color.parseColor(teinte)));
     }
 
     public class LaylineView extends View {
@@ -514,7 +540,7 @@ public class MainActivity extends Activity {
                         map.put("mcog", ent(items.get(8)));
                     }
 
-                } else if (ID.equals("GGA")) {// Qualité : 1 = GPS (blanc), 2 = DGPS (vert)
+                } else if (ID.equals("GGA")) {// Qualité ) 1 = GPS (blanc), 2 = DGPS (vert)
                     msats = items.get(7) + " sats";
                     if (Objects.equals(items.get(6), "1")) {
                         if (GPSColor == Color.GREEN) {
