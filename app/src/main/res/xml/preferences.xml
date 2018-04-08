@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:title="Port serveur UDP"
+        android:key="udpPort"
+        android:summary="Le numéro de port UDP du serveur wifi NMEA (par défaut 10110)"
+        android:defaultValue="10110"
+        android:numeric="integer"
+        android:maxLength="5" />
+    <CheckBoxPreference
+        android:title="Désactiver mise en veille écran"
+        android:defaultValue="false"
+        android:summary="Si cette option est sélectionnée l'écran ne se mettra pas en veille."
+        android:key="disableSleep" />
+
+    <PreferenceCategory
+        android:title="Données affichées">
+        <ListPreference
+            android:key="1"
+            android:title="Case 1"
+            android:summary="%s"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+        <ListPreference
+            android:key="2"
+            android:title="Case 2"
+            android:summary="%s"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+        <ListPreference
+            android:key="3"
+            android:title="Case 3"
+            android:summary="%s"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+        <ListPreference
+            android:key="4"
+            android:title="Case 4"
+            android:summary="%s"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+        <ListPreference
+            android:key="5"
+            android:title="Case 5"
+            android:summary="%s"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+        <ListPreference
+            android:key="6"
+            android:title="Case 6"
+            android:summary="%s"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+        <ListPreference
+            android:key="7"
+            android:title="Case 7"
+            android:summary="%s"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+        <ListPreference
+            android:key="8"
+            android:title="Case 8"
+            android:summary="%s"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+        <ListPreference
+            android:key="9"
+            android:title="Case 9"
+            android:summary="%s"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+        <ListPreference
+            android:key="10"
+            android:title="Case 10"
+            android:summary="%s"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

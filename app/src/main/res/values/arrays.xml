@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="listentries">
+        <item>BOAT SPEED (kn)</item>
+        <item>TWA (°)</item>
+        <item>AWA (°)</item>
+        <item>TWS (kn)</item>
+        <item>TWD (°)</item>
+        <item>TARGET SPD (kn)</item>
+        <item>OPTIMUM VMG (%)</item>
+        <item>OPTIMUM VMG (°)</item>
+        <item>COG (°)</item>
+        <item>SOG (kn)</item>
+        <item>AWS (kn)</item>
+        <item>TOTAL LOCH (nm)</item>
+        <item>TODAY LOCH (nm)</item>
+        <item>HEEL (°)</item>
+        <item>PITCH (°)</item>
+        <item>AIR TEMP (°C)</item>
+        <item>WATER TEMP (°C)</item>
+        <item>BARO (mbar)</item>
+        <item>DEPTH (m)</item>
+        <item>OPP TACK HDG (°)</item>
+        <item>WP DIST (nm)</item>
+        <item>WP BRG (°)</item>
+        <item>WP NAME</item>
+        <item>WP VMC (kn)</item>
+    </string-array>
+    <string-array name="listvalues">
+        <item>BOAT SPEED;kn;mbsp</item>
+        <item>TWA;°;mtwa</item>
+        <item>AWA;°;mawa</item>
+        <item>TWS;kn;mtws</item>
+        <item>TWD;°;mtwd</item>
+        <item>TARGET SPD;kn;mcible</item>
+        <item>OPTIMUM VMG;%;mpopt</item>
+        <item>OPTIMUM VMG;°;mdopt</item>
+        <item>COG;°;mcog</item>
+        <item>SOG;kn;msog</item>
+        <item>AWS;kn;maws</item>
+        <item>TOTAL LOCH;nm;mtotalloch</item>
+        <item>TODAY LOCH;nm;mdayloch</item>
+        <item>HEEL;°;mheel</item>
+        <item>PITCH;°;mpitch</item>
+        <item>AIR TEMP;°C;mairtemp</item>
+        <item>WATER TEMP;°C;mwatertemp</item>
+        <item>BARO;mbar;mbaro</item>
+        <item>DEPTH;m;mdepth</item>
+        <item>OPP TACK HDG;°;mcapab</item>
+        <item>WP DIST;nm;mdistwp</item>
+        <item>WP BRG;°;mcapwp</item>
+        <item>WP NAME;;mnomwp</item>
+        <item>WP VMC;kn;mvmc</item>
+    </string-array>
+</resources>

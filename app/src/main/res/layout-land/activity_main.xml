@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000">
+
+    <ImageView
+        android:id="@+id/ivCompasExt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/compas_ext1080"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/compas_ext1080"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivLL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivCompas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_compas1080"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_compas1080"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivSET"
+        android:layout_width="52dp"
+        android:layout_height="90dp"
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
+        android:src="@drawable/fleche1080"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/fleche1080"
+        tools:ignore="ContentDescription"
+        tools:layout_editor_absoluteY="127dp" />
+
+    <ImageView
+        android:id="@+id/ivAWA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_awa1080"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_awa1080"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivTWA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_twa1080"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_twa1080"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_t1080"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_t1080"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivWP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_wp1080"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_wp1080"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivCOG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_cog1080"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_cog1080"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivHDG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_hdg1080"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_hdg1080"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tvHDG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvDrift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSats"
+        style="@style/Font"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="@dimen/size_label"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/fl5"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="319dp" />
+
+    <TextView
+        android:id="@+id/tvStdDev"
+        style="@style/Font"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="@dimen/size_label"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/fl10"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="319dp" />
+
+    <FrameLayout
+        android:id="@+id/fl1"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvlabel1"
+            style="@style/Font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tvright1"
+            style="@style/Font"
+            android:layout_gravity="end|top"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tv1"
+            style="@style/BoldFont"
+            android:layout_gravity="bottom|center_horizontal"
+            android:textSize="@dimen/size_data" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/vSeparateur1"
+        android:layout_width="140dp"
+        android:layout_height="2dp"
+        android:background="@drawable/separateur"
+        app:layout_constraintBottom_toTopOf="@+id/guideline1"
+        app:layout_constraintLeft_toLeftOf="@+id/fl1"
+        app:layout_constraintTop_toBottomOf="@+id/fl1"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <FrameLayout
+        android:id="@+id/fl6"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvlabel6"
+            style="@style/Font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tvright6"
+            style="@style/Font"
+            android:layout_gravity="end|top"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tv6"
+            style="@style/BoldFont"
+            android:layout_gravity="bottom|center_horizontal"
+            android:textSize="@dimen/size_data" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/vSeparateur1R"
+        android:layout_width="140dp"
+        android:layout_height="2dp"
+        android:background="@drawable/separateur"
+        app:layout_constraintBottom_toTopOf="@+id/guideline1"
+        app:layout_constraintRight_toRightOf="@+id/fl6"
+        app:layout_constraintTop_toBottomOf="@+id/fl6"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline1"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <FrameLayout
+        android:id="@+id/fl2"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vSeparateur1">
+
+        <TextView
+            android:id="@+id/tvlabel2"
+            style="@style/Font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tvright2"
+            style="@style/Font"
+            android:layout_gravity="end|top"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tv2"
+            style="@style/BoldFont"
+            android:layout_gravity="bottom|center_horizontal"
+            android:textSize="@dimen/size_data" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/vSeparateur2"
+        android:layout_width="140dp"
+        android:layout_height="2dp"
+        android:background="@drawable/separateur"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintLeft_toLeftOf="@+id/fl2"
+        app:layout_constraintTop_toBottomOf="@+id/fl2"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <FrameLayout
+        android:id="@+id/fl7"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vSeparateur1R">
+
+        <TextView
+            android:id="@+id/tvlabel7"
+            style="@style/Font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tvright7"
+            style="@style/Font"
+            android:layout_gravity="end|top"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tv7"
+            style="@style/BoldFont"
+            android:layout_gravity="bottom|center_horizontal"
+            android:textSize="@dimen/size_data" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/vSeparateur2R"
+        android:layout_width="140dp"
+        android:layout_height="2dp"
+        android:background="@drawable/separateur"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintRight_toRightOf="@+id/fl7"
+        app:layout_constraintTop_toBottomOf="@+id/fl7"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline2"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <FrameLayout
+        android:id="@+id/fl3"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vSeparateur2">
+
+        <TextView
+            android:id="@+id/tvlabel3"
+            style="@style/Font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tvright3"
+            style="@style/Font"
+            android:layout_gravity="end|top"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tv3"
+            style="@style/BoldFont"
+            android:layout_gravity="bottom|center_horizontal"
+            android:textSize="@dimen/size_data" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/vSeparateur3"
+        android:layout_width="140dp"
+        android:layout_height="2dp"
+        android:background="@drawable/separateur"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintLeft_toLeftOf="@+id/fl3"
+        app:layout_constraintTop_toBottomOf="@+id/fl3"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <FrameLayout
+        android:id="@+id/fl8"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vSeparateur2R">
+
+        <TextView
+            android:id="@+id/tvlabel8"
+            style="@style/Font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tvright8"
+            style="@style/Font"
+            android:layout_gravity="end|top"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tv8"
+            style="@style/BoldFont"
+            android:layout_gravity="bottom|center_horizontal"
+            android:textSize="@dimen/size_data" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/vSeparateur3R"
+        android:layout_width="140dp"
+        android:layout_height="2dp"
+        android:background="@drawable/separateur"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintRight_toRightOf="@+id/fl8"
+        app:layout_constraintTop_toBottomOf="@+id/fl8"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline3"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <FrameLayout
+        android:id="@+id/fl4"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vSeparateur3">
+
+        <TextView
+            android:id="@+id/tvlabel4"
+            style="@style/Font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tvright4"
+            style="@style/Font"
+            android:layout_gravity="end|top"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tv4"
+            style="@style/BoldFont"
+            android:layout_gravity="bottom|center_horizontal"
+            android:textSize="@dimen/size_data" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/vSeparateur4"
+        android:layout_width="140dp"
+        android:layout_height="2dp"
+        android:background="@drawable/separateur"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintLeft_toLeftOf="@+id/fl4"
+        app:layout_constraintTop_toBottomOf="@+id/fl4"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <FrameLayout
+        android:id="@+id/fl9"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vSeparateur3R">
+
+        <TextView
+            android:id="@+id/tvlabel9"
+            style="@style/Font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tvright9"
+            style="@style/Font"
+            android:layout_gravity="end|top"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tv9"
+            style="@style/BoldFont"
+            android:layout_gravity="bottom|center_horizontal"
+            android:textSize="@dimen/size_data" />
+    </FrameLayout>
+
+    <View
+        android:id="@+id/vSeparateur4R"
+        android:layout_width="140dp"
+        android:layout_height="2dp"
+        android:background="@drawable/separateur"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintRight_toRightOf="@+id/fl9"
+        app:layout_constraintTop_toBottomOf="@+id/fl9"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline4"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <FrameLayout
+        android:id="@+id/fl5"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vSeparateur4">
+
+        <TextView
+            android:id="@+id/tvlabel5"
+            style="@style/Font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tvright5"
+            style="@style/Font"
+            android:layout_gravity="end|top"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tv5"
+            style="@style/BoldFont"
+            android:layout_gravity="bottom|center_horizontal"
+            android:textSize="@dimen/size_data" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl10"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vSeparateur4R">
+
+        <TextView
+            android:id="@+id/tvlabel10"
+            style="@style/Font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tvright10"
+            style="@style/Font"
+            android:layout_gravity="end|top"
+            android:textSize="@dimen/size_label" />
+
+        <TextView
+            android:id="@+id/tv10"
+            style="@style/BoldFont"
+            android:layout_gravity="bottom|center_horizontal"
+            android:textSize="@dimen/size_data" />
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>
