@@ -24,8 +24,8 @@ import android.widget.TextView;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,8 +42,6 @@ public class MainActivity extends Activity {
     private AverageQueue tws10mn = new AverageQueue(600);
     private AverageQueue twd10mn = new AverageQueue(600);
 
-    private UDPReceiver udpReceiver = null;
-
     private static final int MAX_UDP_DATAGRAM_LEN = 1500;
     private static int UDP_SERVER_PORT;
 
@@ -54,7 +52,6 @@ public class MainActivity extends Activity {
     private String[] tvVar = new String[11];
     private static String mhdg, mdrift, msats, mstddev, mtwsavg10, mtwdavg10;
     private static float mset, mtwa, mawa, mcog, mhdgf, mcapwp, mdopt, mtwd;
-    private int countLL = 0;
     Map<String,String> map = new HashMap<>();
 
     Timer timer;
@@ -78,7 +75,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        udpReceiver = new UDPReceiver();
+        UDPReceiver udpReceiver = new UDPReceiver();
         udpReceiver.start();
 
         if (bAwake) getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -98,7 +95,6 @@ public class MainActivity extends Activity {
 
         startTimer();
         initialiseCases();
-        screenUpdate();
     }
 
 /*
@@ -128,6 +124,7 @@ public class MainActivity extends Activity {
         timer.schedule(timerTask, 1000, 1000);
     }
 
+/*
     public void stoptimertask() {
         //stop the timer, if it's not already null
         if (timer != null) {
@@ -135,6 +132,7 @@ public class MainActivity extends Activity {
             timer = null;
         }
     }
+*/
 
     public void initialiseCases() {
 
@@ -210,16 +208,12 @@ public class MainActivity extends Activity {
         timerTask = new TimerTask() {
             public void run() {
 
-                // Calcul min et max laylines toutes les 10 secondes
-                if (countLL == 10) {
-                    twd10mn.calculMinMax();
-                    countLL = 0;
-                }
-                countLL++;
+                test();
 
                 // Mise à jour des informations à l'écran
                 handler.post(new Runnable() {
                     public void run() {
+                        screenUpdate();
                         if(hdg != null) hdg.setText(mhdg);
                         if(drift != null) drift.setText(mdrift);
                         if(sats != null) sats.setText(msats);
@@ -231,6 +225,47 @@ public class MainActivity extends Activity {
                 });
             }
         };
+    }
+
+    // A virer avec test() quand ça sera fini
+    private String roundTwoDecimals(float f) {
+        DecimalFormatSymbols point = new DecimalFormatSymbols();
+        point.setDecimalSeparator('.');
+        DecimalFormat twoDForm = new DecimalFormat("0.00", point);
+        return twoDForm.format(f);
+    }
+
+    private void test() {
+        map.put("mbsp", "4.23");
+        map.put("mpopt", "103");
+        map.put("mcible", "4.14");
+        map.put("msog", "4.35");
+        map.put("mtws", roundTwoDecimals(Float.parseFloat("08.0")));
+        map.put("maws", roundTwoDecimals(Float.parseFloat("04.1")));
+        map.put("mheel", "3");
+        map.put("mdepth", roundTwoDecimals(Float.parseFloat("004.8")));
+        map.put("mdayloch", roundTwoDecimals(Float.parseFloat("006.1")));
+        msats = "12 sats";
+        mstddev = "1.20 m";
+        UpdateCellColor(stddev, Color.GREEN);
+        UpdateCellColor(sats, Color.GREEN);
+        mcog = 50;
+        mhdgf = 53;
+        mhdg = String.valueOf((int)mhdgf);
+        mdopt = 163;
+        map.put("mdopt", String.valueOf((int)mdopt));
+        mtwa = 163;
+        map.put("mtwa", String.valueOf((int)mtwa));
+        mtwd = mhdgf + mtwa;
+        if (mtwd >= 360) mtwd -= 360;
+        map.put("mtwd", String.valueOf((int)mtwd));
+        mcapwp = 43;
+        mset = 0;
+        mdrift = "0.2";
+        mawa = 146;
+        map.put("mawa", String.valueOf((int)mawa));
+        twd10mn.update(String.valueOf(mtwd - 7));
+        twd10mn.update(String.valueOf(mtwd + 8));
     }
 
     @Override
@@ -245,10 +280,10 @@ public class MainActivity extends Activity {
     }
 
     public void screenUpdate() {
-        rotate(imageCompas, mhdgf);
-        rotate(imageCOG, mcog);
-        rotate(imageSET, mset);
-        rotate(imageWP, mcapwp);
+        rotate(imageCompas, -mhdgf);
+        rotate(imageCOG, mcog - mhdgf);
+        rotate(imageSET, mset - mhdgf);
+        rotate(imageWP, mcapwp - mhdgf);
         rotate(imageTWA, mtwa);
         rotate(imageT, mtwa);
         rotate(imageAWA, mawa);
@@ -257,12 +292,13 @@ public class MainActivity extends Activity {
         setTWAcolor();
 
         // Dessin des laylines
-        leftLLangle = mtwd + mdopt;
-        rightLLangle = mtwd - mdopt;
-        minLeftLLangle = twd10mn.getMin() + mdopt;
-        maxLeftLLangle = twd10mn.getMax() + mdopt;
-        minRightLLangle = twd10mn.getMin() - mdopt;
-        maxRightLLangle = twd10mn.getMax() - mdopt;
+        twd10mn.calculMinMax();
+        leftLLangle = mtwd + mdopt - mhdgf;
+        rightLLangle = mtwd - mdopt - mhdgf;
+        minLeftLLangle = twd10mn.getMin() + mdopt - mhdgf;
+        maxLeftLLangle = twd10mn.getMax() + mdopt - mhdgf;
+        minRightLLangle = twd10mn.getMin() - mdopt - mhdgf;
+        maxRightLLangle = twd10mn.getMax() - mdopt - mhdgf;
         View llv = new LaylineView(getApplicationContext());
         Bitmap bitmap = Bitmap.createBitmap(720, 720, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -283,27 +319,29 @@ public class MainActivity extends Activity {
     }
 
     public void setTWAcolor() {
-        int offset;
-        String teinte = "00ff00";
-        if (mtwa < 90.0 ) offset = (int) (mtwa - mdopt);
-        else offset = (int) (mdopt - mtwa);
+        int twa, offset;
+        String teinte = "#00ff00";
+        if (mtwa > 180) twa = (int) (360 - mtwa);
+        else twa = (int) mtwa;
+        if (mdopt < 90.0 ) offset = (int) (twa - mdopt);
+        else offset = (int) (mdopt - twa);
 
-        if      (offset <= -5) teinte = "ff0000"; // rouge
-        else if (offset == -4) teinte = "cc3300";
-        else if (offset == -3) teinte = "996600";
-        else if (offset == -2) teinte = "669900";
-        else if (offset == -1) teinte = "33cc00";
-        else if (offset ==  0) teinte = "00ff00"; // vert
-        else if (offset ==  1) teinte = "00e51a";
-        else if (offset ==  2) teinte = "00cc33";
-        else if (offset ==  3) teinte = "00b24d";
-        else if (offset ==  4) teinte = "009966";
-        else if (offset ==  5) teinte = "007f80";
-        else if (offset ==  6) teinte = "006699";
-        else if (offset ==  7) teinte = "004db2";
-        else if (offset ==  8) teinte = "0033cc";
-        else if (offset ==  9) teinte = "001ae5";
-        else if (offset >= 10) teinte = "0000ff"; // bleu
+        if      (offset <= -5) teinte = "#ff0000"; // rouge
+        else if (offset == -4) teinte = "#cc3300";
+        else if (offset == -3) teinte = "#996600";
+        else if (offset == -2) teinte = "#669900";
+        else if (offset == -1) teinte = "#33cc00";
+        else if (offset ==  0) teinte = "#00ff00"; // vert
+        else if (offset ==  1) teinte = "#00e51a";
+        else if (offset ==  2) teinte = "#00cc33";
+        else if (offset ==  3) teinte = "#00b24d";
+        else if (offset ==  4) teinte = "#009966";
+        else if (offset ==  5) teinte = "#007f80";
+        else if (offset ==  6) teinte = "#006699";
+        else if (offset ==  7) teinte = "#004db2";
+        else if (offset ==  8) teinte = "#0033cc";
+        else if (offset ==  9) teinte = "#001ae5";
+        else if (offset >= 10) teinte = "#0000ff"; // bleu
 
         imageTWA.setImageTintList(ColorStateList.valueOf(Color.parseColor(teinte)));
     }
@@ -377,7 +415,6 @@ public class MainActivity extends Activity {
         float avg = 0;
         float min = 0;
         float max = 0;
-        float next;
         int capa = 0;
         Queue q;
 
@@ -405,11 +442,11 @@ public class MainActivity extends Activity {
         private void calculMinMax() {
             min = 359; // Sinon on ne trouve pas le plus petit qui peut être 359
             max = 0;
-            float next;
+            float current;
             for (Iterator<Float> i = q.iterator(); i.hasNext();) {
-                next = i.next();
-                if (next < min) min = next;
-                else if (next > max) max = next;
+                current = i.next();
+                if (current < min) min = current;
+                else if (current > max) max = current;
             }
         }
 
@@ -434,7 +471,7 @@ public class MainActivity extends Activity {
     private class UDPReceiver extends Thread {
         private boolean bKeepRunning = true;
         private String lastMessage = "";
-        private InetAddress server_addr;
+        //private InetAddress server_addr;
         private DatagramSocket socket;
 
         public void run() {
@@ -468,9 +505,11 @@ public class MainActivity extends Activity {
             }
         }
 
+/*
         public void kill() {
             bKeepRunning = false;
         }
+*/
 
         // Traitement d'un paquet UDP reçu
         private void parseNMEA(String str) {
@@ -490,105 +529,122 @@ public class MainActivity extends Activity {
                 final List<String> items = Arrays.asList(line.split("\\s*,\\s*"));
                 String ID = items.get(0).substring(3, 6);
 
-                if (ID.equals("HDM")) {
-                    mhdg = ent(items.get(1));
-                    mhdgf = str2float(items.get(1));
+                switch (ID) {
+                    case "HDM":
+                        mhdg = ent(items.get(1));
+                        mhdgf = str2float(items.get(1));
+                        break;
 
-                } else if (ID.equals("VHW")) {
-                    map.put("mbsp", items.get(5));
+                    case "VHW":
+                        map.put("mbsp", items.get(5));
+                        break;
 
-                } else if (ID.equals("VLW")) {
-                    map.put("mtotalloch", ent(items.get(1)));
-                    map.put("mdayloch", items.get(3));
+                    case "VLW":
+                        map.put("mtotalloch", ent(items.get(1)));
+                        map.put("mdayloch", roundTwoDecimals(Float.parseFloat(items.get(3))));
+                        break;
 
-                } else if (ID.equals("MWV")) {
-                    final String wss = items.get(3);
-                    if (Objects.equals(items.get(2), "T")) {
-                        final float wss10mn = tws10mn.update(wss);
-                        mtwa = str2float(items.get(1));
-                        map.put("mtwa", getwa(items.get(1)));
-                        map.put("mtws", wss);
-                        mtwsavg10 = String.valueOf(roundTwoDecimals(wss10mn));
-                    } else if (Objects.equals(items.get(2), "R")) {
-                        mawa = str2float(items.get(1));
-                        map.put("mawa", getwa(items.get(1)));
-                        map.put("maws", wss);
-                    }
-
-                } else if (ID.equals("MWD")) {
-                    final String twds = items.get(3);
-                    final float twds10mn = twd10mn.update(twds);
-                    map.put("mtwd", ent(twds));
-                    mtwd = str2float(items.get(3));
-                    mtwdavg10 = ent(String.valueOf(twds10mn));
-
-                } else if (ID.equals("XDR")) {
-                    if (Objects.equals(items.get(4), "Heel")) {
-                        map.put("mheel", abs(ent(items.get(2)))) ;
-                    } else if (Objects.equals(items.get(4), "Pitch")) {
-                        map.put("mpitch", abs(ent(items.get(2))));
-                    } else if (Objects.equals(items.get(4), "AirTemp")) {
-                        map.put("mairtemp", items.get(2));
-                    } else if (Objects.equals(items.get(4), "Barometer")) {
-                        map.put("mbaro", bar2mbar(items.get(2)));
-                    }
-
-                } else if (ID.equals("RMC")) {// Fix valide = A
-                    if (Objects.equals(items.get(2), "A")) {
-                        mcog = str2float(items.get(8));
-                        map.put("msog", items.get(7));
-                        map.put("mcog", ent(items.get(8)));
-                    }
-
-                } else if (ID.equals("GGA")) {// Qualité ) 1 = GPS (blanc), 2 = DGPS (vert)
-                    msats = items.get(7) + " sats";
-                    if (Objects.equals(items.get(6), "1")) {
-                        if (GPSColor == Color.GREEN) {
-                            UpdateCellColor(stddev, Color.WHITE);
-                            UpdateCellColor(sats, Color.WHITE);
-                            GPSColor = Color.WHITE;
+                    case "MWV":
+                        final String wss = roundTwoDecimals(Float.parseFloat(items.get(3)));
+                        if (Objects.equals(items.get(2), "T")) {
+                            final float wss10mn = tws10mn.update(wss);
+                            mtwa = str2float(items.get(1));
+                            map.put("mtwa", getwa(items.get(1)));
+                            map.put("mtws", wss);
+                            mtwsavg10 = roundTwoDecimals(wss10mn);
+                        } else if (Objects.equals(items.get(2), "R")) {
+                            mawa = str2float(items.get(1));
+                            map.put("mawa", getwa(items.get(1)));
+                            map.put("maws", wss);
                         }
-                    } else if (Objects.equals(items.get(6), "2")) {
-                        if (GPSColor == Color.WHITE) {
-                            UpdateCellColor(stddev, Color.GREEN);
-                            UpdateCellColor(sats, Color.GREEN);
-                            GPSColor = Color.GREEN;
+                        break;
+
+                    case "MWD":
+                        final String twds = items.get(3);
+                        final float twds10mn = twd10mn.update(twds);
+                        map.put("mtwd", ent(twds));
+                        mtwd = str2float(items.get(3));
+                        mtwdavg10 = ent(String.valueOf(twds10mn));
+                        break;
+
+                    case "XDR":
+                        if (Objects.equals(items.get(4), "Heel")) {
+                            map.put("mheel", abs(ent(items.get(2)))) ;
+                        } else if (Objects.equals(items.get(4), "Pitch")) {
+                            map.put("mpitch", abs(ent(items.get(2))));
+                        } else if (Objects.equals(items.get(4), "AirTemp")) {
+                            map.put("mairtemp", items.get(2));
+                        } else if (Objects.equals(items.get(4), "Barometer")) {
+                            map.put("mbaro", bar2mbar(items.get(2)));
                         }
-                    }
+                        break;
 
-                } else if (ID.equals("VDR")) {
-                    mdrift = items.get(5);
-                    mset = str2float(items.get(3));
+                    case "RMC":// Fix valide = A
+                        if (Objects.equals(items.get(2), "A")) {
+                            mcog = str2float(items.get(8));
+                            map.put("msog", items.get(7));
+                            map.put("mcog", ent(items.get(8)));
+                        }
+                        break;
 
-                } else if (ID.equals("MTW")) {
-                    map.put("mwatertemp", items.get(1));
+                    case "GGA":// Qualité ) 1 = GPS (blanc), 2 = DGPS (vert)
+                        msats = items.get(7) + " sats";
+                        if (Objects.equals(items.get(6), "1")) {
+                            if (GPSColor == Color.GREEN) {
+                                UpdateCellColor(stddev, Color.WHITE);
+                                UpdateCellColor(sats, Color.WHITE);
+                                GPSColor = Color.WHITE;
+                            }
+                        } else if (Objects.equals(items.get(6), "2")) {
+                            if (GPSColor == Color.WHITE) {
+                                UpdateCellColor(stddev, Color.GREEN);
+                                UpdateCellColor(sats, Color.GREEN);
+                                GPSColor = Color.GREEN;
+                            }
+                        }
+                        break;
 
-                } else if (ID.equals("DPT")) {
-                    map.put("mdepth", items.get(1));
+                    case "VDR":
+                        mdrift = items.get(5);
+                        mset = str2float(items.get(3));
+                        break;
 
-                } else if (ID.equals("ZPE")) {
-                    map.put("mcible", items.get(1));
-                    map.put("mcapab", ent(items.get(2)));
-                    map.put("mdopt", items.get(3));
-                    mdopt = str2float(items.get(3));
-                    final int opt = Integer.parseInt(items.get(3));
-                    if (opt < 90)
-                        map.put("mpopt", items.get(4));
-                    else if (opt >= 90)
-                        map.put("mpopt", items.get(5));
+                    case "MTW":
+                        map.put("mwatertemp", items.get(1));
+                        break;
 
-                } else if (ID.equals("RMB")) {
-                    map.put("mdistwp", items.get(10));
-                    map.put("mcapwp", ent(items.get(11)));
-                    mcapwp = str2float(items.get(11));
-                    map.put("mvmc", items.get(12));
-                    map.put("mnomwp", "CAP " + items.get(4).substring(0, 4));
+                    case "DPT":
+                        map.put("mdepth", roundTwoDecimals(Float.parseFloat(items.get(1))));
+                        break;
 
-                } else if (ID.equals("GST")) {
-                    Double lat = Double.parseDouble(items.get(6));
-                    Double lon = Double.parseDouble(items.get(7));
-                    mstddev = String.valueOf(roundTwoDecimals((float) Math.sqrt(lat*lat + lon*lon))) + " m";
+                    case "ZPE":
+                        map.put("mcible", items.get(1));
+                        map.put("mcapab", ent(items.get(2)));
+                        map.put("mdopt", items.get(3));
+                        mdopt = str2float(items.get(3));
+                        final int opt = Integer.parseInt(items.get(3));
+                        if (opt < 90)
+                            map.put("mpopt", items.get(4));
+                        else if (opt >= 90)
+                            map.put("mpopt", items.get(5));
+                        break;
 
+                    case "RMB":
+                        map.put("mdistwp", items.get(10));
+                        map.put("mcapwp", ent(items.get(11)));
+                        mcapwp = str2float(items.get(11));
+                        map.put("mvmc", items.get(12));
+                        map.put("mnomwp", "CAP " + items.get(4).substring(0, 4));
+                        break;
+
+                    case "GST":
+                        Double lat = Double.parseDouble(items.get(6));
+                        Double lon = Double.parseDouble(items.get(7));
+                        mstddev = roundTwoDecimals((float) Math.sqrt(lat*lat + lon*lon)) + " m";
+                        break;
+
+                    default:
+                        break;
                 }
             }
         }
@@ -626,10 +682,12 @@ public class MainActivity extends Activity {
         }
 
 
-        // Retourne un float arrondi à 2 décimales
-        float roundTwoDecimals(float d) {
-            DecimalFormat twoDForm = new DecimalFormat("#.##");
-            return Float.valueOf(twoDForm.format(d));
+        // Retourne une String arrondie à 2 décimales
+        private String roundTwoDecimals(float f) {
+            DecimalFormatSymbols point = new DecimalFormatSymbols();
+            point.setDecimalSeparator('.');
+            DecimalFormat twoDForm = new DecimalFormat("0.00", point);
+            return twoDForm.format(f);
         }
     }
 }
