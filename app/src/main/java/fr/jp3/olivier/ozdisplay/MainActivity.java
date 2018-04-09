@@ -1,5 +1,6 @@
 package fr.jp3.olivier.ozdisplay;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,6 +54,8 @@ public class MainActivity extends Activity {
     private String[] tvVar = new String[11];
     private static String mhdg, mdrift, msats, mstddev, mtwsavg10, mtwdavg10;
     private static float mset, mtwa, mawa, mcog, mhdgf, mcapwp, mdopt, mtwd;
+    private String curTWAColor = "#00ff00";
+
     Map<String,String> map = new HashMap<>();
 
     Timer timer;
@@ -65,6 +69,7 @@ public class MainActivity extends Activity {
 
     // define the display assembly compass picture
     private ImageView imageCompas, imageCOG, imageSET, imageWP, imageTWA, imageAWA, imageT;
+    private RotateAnim raCompas, raCOG, raSET, raWP, raTWA, raAWA, raT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,14 @@ public class MainActivity extends Activity {
         imageTWA    = (ImageView) findViewById(R.id.ivTWA);
         imageAWA    = (ImageView) findViewById(R.id.ivAWA);
         imageT      = (ImageView) findViewById(R.id.ivT);
+
+        raCompas    = new RotateAnim(imageCompas);
+        raCOG       = new RotateAnim(imageCOG);
+        raSET       = new RotateAnim(imageSET);
+        raWP        = new RotateAnim(imageWP);
+        raTWA       = new RotateAnim(imageTWA);
+        raAWA       = new RotateAnim(imageAWA);
+        raT         = new RotateAnim(imageT);
 
         hdg         = (TextView) findViewById(R.id.tvHDG);
         drift       = (TextView) findViewById(R.id.tvDrift);
@@ -235,7 +248,10 @@ public class MainActivity extends Activity {
         return twoDForm.format(f);
     }
 
+    int count = -10;
     private void test() {
+
+        if (count > 5) count = -10;
         map.put("mbsp", "4.23");
         map.put("mpopt", "103");
         map.put("mcible", "4.14");
@@ -254,7 +270,7 @@ public class MainActivity extends Activity {
         mhdg = String.valueOf((int)mhdgf);
         mdopt = 163;
         map.put("mdopt", String.valueOf((int)mdopt));
-        mtwa = 163;
+        mtwa = 163 + count;
         map.put("mtwa", String.valueOf((int)mtwa));
         mtwd = mhdgf + mtwa;
         if (mtwd >= 360) mtwd -= 360;
@@ -266,6 +282,7 @@ public class MainActivity extends Activity {
         map.put("mawa", String.valueOf((int)mawa));
         twd10mn.update(String.valueOf(mtwd - 7));
         twd10mn.update(String.valueOf(mtwd + 8));
+        count++;
     }
 
     @Override
@@ -280,13 +297,13 @@ public class MainActivity extends Activity {
     }
 
     public void screenUpdate() {
-        rotate(imageCompas, -mhdgf);
-        rotate(imageCOG, mcog - mhdgf);
-        rotate(imageSET, mset - mhdgf);
-        rotate(imageWP, mcapwp - mhdgf);
-        rotate(imageTWA, mtwa);
-        rotate(imageT, mtwa);
-        rotate(imageAWA, mawa);
+        raCompas.rotate(-mhdgf);
+        raCOG.rotate(mcog - mhdgf);
+        raSET.rotate(mset - mhdgf);
+        raWP.rotate(mcapwp - mhdgf);
+        raTWA.rotate(mtwa);
+        raT.rotate(mtwa);
+        raAWA.rotate(mawa);
 
         // Colorisation TWA
         setTWAcolor();
@@ -307,18 +324,47 @@ public class MainActivity extends Activity {
         iv.setImageBitmap(bitmap);
     }
 
-    public void rotate(ImageView iv,  Float bearing){
-        if(bearing != null) {
-            RotateAnimation ra = new RotateAnimation(bearing, bearing,
-                    Animation.RELATIVE_TO_SELF, 0.5f,
-                    Animation.RELATIVE_TO_SELF, 0.5f);
-            ra.setFillAfter(true); //make the arrow stay at its destination (after rotation)
-            ra.setDuration(800);
-            iv.startAnimation(ra);
+    private class RotateAnim {
+        float currentAngle;
+        ImageView iv;
+        LinearInterpolator li;
+
+        private RotateAnim(ImageView image) {
+            currentAngle = 0f;
+            iv = image;
+            li = new LinearInterpolator();
+        }
+
+        private void rotate(Float bearing) {
+            if (bearing != null) {
+                RotateAnimation ra = new RotateAnimation(currentAngle, bearing,
+                        Animation.RELATIVE_TO_SELF, 0.5f,
+                        Animation.RELATIVE_TO_SELF, 0.5f);
+                ra.setFillAfter(true); //make the arrow stay at its destination (after rotation)
+                ra.setDuration(1000);
+                ra.setInterpolator(li);
+                iv.startAnimation(ra);
+                currentAngle = bearing;
+            }
         }
     }
 
-    public void setTWAcolor() {
+    private void setColorAnim(String newTWAColor) {
+        ValueAnimator anim = ValueAnimator.ofArgb(Color.parseColor(curTWAColor), Color.parseColor(newTWAColor));
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                //view.setBackgroundColor((Integer)valueAnimator.getAnimatedValue());
+                imageTWA.setImageTintList(ColorStateList.valueOf((Integer)valueAnimator.getAnimatedValue()));
+            }
+        });
+
+        anim.setDuration(1000);
+        anim.start();
+        curTWAColor = newTWAColor;
+    }
+
+    private void setTWAcolor() {
         int twa, offset;
         String teinte = "#00ff00";
         if (mtwa > 180) twa = (int) (360 - mtwa);
@@ -343,10 +389,10 @@ public class MainActivity extends Activity {
         else if (offset ==  9) teinte = "#001ae5";
         else if (offset >= 10) teinte = "#0000ff"; // bleu
 
-        imageTWA.setImageTintList(ColorStateList.valueOf(Color.parseColor(teinte)));
+        setColorAnim(teinte);
     }
 
-    public class LaylineView extends View {
+    private class LaylineView extends View {
         Path path;
         Paint pBackground;
         Paint paint;
@@ -356,7 +402,7 @@ public class MainActivity extends Activity {
         float height;
         float radius;
 
-        public LaylineView(Context context) {
+        private LaylineView(Context context) {
             super(context);
             init();
         }
