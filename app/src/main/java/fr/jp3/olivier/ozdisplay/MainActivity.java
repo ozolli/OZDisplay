@@ -68,8 +68,8 @@ public class MainActivity extends Activity {
     private float leftLLangle, rightLLangle, minLeftLLangle, maxLeftLLangle, minRightLLangle, maxRightLLangle;
 
     // define the display assembly compass picture
-    private ImageView imageCompas, imageCOG, imageSET, imageWP, imageTWA, imageAWA, imageT;
-    private RotateAnim raCompas, raCOG, raSET, raWP, raTWA, raAWA, raT;
+    private ImageView imageCompas, imageCOG, imageSET, imageWP, imageTWA, imageAWA, imageT, imageLL;
+    private RotateAnim raCompas, raCOG, raSET, raWP, raTWA, raAWA, raT, raLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +92,7 @@ public class MainActivity extends Activity {
         imageTWA    = (ImageView) findViewById(R.id.ivTWA);
         imageAWA    = (ImageView) findViewById(R.id.ivAWA);
         imageT      = (ImageView) findViewById(R.id.ivT);
+        imageLL     = (ImageView) findViewById(R.id.ivLL);
 
         raCompas    = new RotateAnim(imageCompas);
         raCOG       = new RotateAnim(imageCOG);
@@ -100,6 +101,7 @@ public class MainActivity extends Activity {
         raTWA       = new RotateAnim(imageTWA);
         raAWA       = new RotateAnim(imageAWA);
         raT         = new RotateAnim(imageT);
+        raLL         = new RotateAnim(imageLL);
 
         hdg         = (TextView) findViewById(R.id.tvHDG);
         drift       = (TextView) findViewById(R.id.tvDrift);
@@ -248,10 +250,10 @@ public class MainActivity extends Activity {
         return twoDForm.format(f);
     }
 
-    int count = -10;
+    int count = -5;
     private void test() {
 
-        if (count > 5) count = -10;
+        if (count > 10) count = -5;
         map.put("mbsp", "4.23");
         map.put("mpopt", "103");
         map.put("mcible", "4.14");
@@ -266,19 +268,19 @@ public class MainActivity extends Activity {
         UpdateCellColor(stddev, Color.GREEN);
         UpdateCellColor(sats, Color.GREEN);
         mcog = 50;
-        mhdgf = 53;
+        mhdgf = 53 - count;
         mhdg = String.valueOf((int)mhdgf);
-        mdopt = 163;
+        mdopt = 43;
         map.put("mdopt", String.valueOf((int)mdopt));
-        mtwa = 163 + count;
+        mtwa = 43 + count;
         map.put("mtwa", String.valueOf((int)mtwa));
         mtwd = mhdgf + mtwa;
         if (mtwd >= 360) mtwd -= 360;
         map.put("mtwd", String.valueOf((int)mtwd));
-        mcapwp = 43;
+        mcapwp = 70;
         mset = 0;
         mdrift = "0.2";
-        mawa = 146;
+        mawa = 30;
         map.put("mawa", String.valueOf((int)mawa));
         twd10mn.update(String.valueOf(mtwd - 7));
         twd10mn.update(String.valueOf(mtwd + 8));
@@ -310,18 +312,18 @@ public class MainActivity extends Activity {
 
         // Dessin des laylines
         twd10mn.calculMinMax();
-        leftLLangle = mtwd + mdopt - mhdgf;
-        rightLLangle = mtwd - mdopt - mhdgf;
-        minLeftLLangle = twd10mn.getMin() + mdopt - mhdgf;
-        maxLeftLLangle = twd10mn.getMax() + mdopt - mhdgf;
-        minRightLLangle = twd10mn.getMin() - mdopt - mhdgf;
-        maxRightLLangle = twd10mn.getMax() - mdopt - mhdgf;
+        leftLLangle = mtwd + mdopt;
+        rightLLangle = mtwd - mdopt;
+        minLeftLLangle = twd10mn.getMin() + mdopt;
+        maxLeftLLangle = twd10mn.getMax() + mdopt;
+        minRightLLangle = twd10mn.getMin() - mdopt;
+        maxRightLLangle = twd10mn.getMax() - mdopt;
         View llv = new LaylineView(getApplicationContext());
         Bitmap bitmap = Bitmap.createBitmap(720, 720, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         llv.draw(canvas);
-        ImageView iv = (ImageView) findViewById(R.id.ivLL);
-        iv.setImageBitmap(bitmap);
+        imageLL.setImageBitmap(bitmap);
+        raLL.rotate(-mhdgf);
     }
 
     private class RotateAnim {
