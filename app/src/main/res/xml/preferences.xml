@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
-        android:title="Port serveur UDP"
-        android:key="udpPort"
-        android:summary="Le numéro de port UDP du serveur wifi NMEA (par défaut 10110)"
         android:defaultValue="10110"
+        android:key="udpPort"
+        android:maxLength="5"
         android:numeric="integer"
-        android:maxLength="5" />
+        android:summary="Numéro de port UDP du serveur wifi NMEA : 10110"
+        android:title="Port serveur UDP" />
     <CheckBoxPreference
         android:title="Désactiver mise en veille écran"
         android:defaultValue="false"
