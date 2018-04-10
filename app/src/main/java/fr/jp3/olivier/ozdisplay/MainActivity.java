@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -55,6 +56,7 @@ public class MainActivity extends Activity {
     private static String mhdg, mdrift, msats, mstddev, mtwsavg10, mtwdavg10;
     private static float mset, mtwa, mawa, mcog, mhdgf, mcapwp, mdopt, mtwd;
     private String curTWAColor = "#00ff00";
+    private int raTime = 1000;
 
     Map<String,String> map = new HashMap<>();
 
@@ -63,6 +65,7 @@ public class MainActivity extends Activity {
     //we are going to use a handler to be able to run in our TimerTask
     final Handler handler = new Handler();
     SharedPreferences SP;
+    public static boolean prefsChanged = false;
 
     // Variables laylines
     private float leftLLangle, rightLLangle, minLeftLLangle, maxLeftLLangle, minRightLLangle, maxRightLLangle;
@@ -73,17 +76,11 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        UDP_SERVER_PORT = Integer.parseInt(SP.getString("udpPort", "10110"));
-        boolean bAwake = SP.getBoolean("disableSleep", false);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         UDPReceiver udpReceiver = new UDPReceiver();
         udpReceiver.start();
-
-        if (bAwake) getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         imageCompas = (ImageView) findViewById(R.id.ivCompas);
         imageCOG    = (ImageView) findViewById(R.id.ivCOG);
@@ -107,51 +104,6 @@ public class MainActivity extends Activity {
         drift       = (TextView) findViewById(R.id.tvDrift);
         stddev      = (TextView) findViewById(R.id.tvStdDev);
         sats        = (TextView) findViewById(R.id.tvSats);
-
-        startTimer();
-        initialiseCases();
-    }
-
-/*
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        //onResume we start our timer so it can start when the app comes from the background
-        startTimer(); // Soucis %cpu retour veille
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (!bKeepNmea) stoptimertask();
-    }
-*/
-
-    public void startTimer() {
-        //set a new Timer
-        timer = new Timer();
-
-        //initialize the TimerTask's job
-        initializeTimerTask();
-
-        //schedule the timer, after the first 1000ms the TimerTask will run every 1000ms
-        timer.schedule(timerTask, 1000, 1000);
-    }
-
-/*
-    public void stoptimertask() {
-        //stop the timer, if it's not already null
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }
-*/
-
-    public void initialiseCases() {
-
-        String[] parts;
 
         for(int i = 1; i < 11; i++) {
             tv[i] = new TextView(this);
@@ -191,6 +143,60 @@ public class MainActivity extends Activity {
         tvRight[8]     = (TextView) findViewById(R.id.tvright8);
         tvRight[9]     = (TextView) findViewById(R.id.tvright9);
         tvRight[10]    = (TextView) findViewById(R.id.tvright10);
+
+        initialisePrefs();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (prefsChanged) {
+            initialisePrefs();
+            prefsChanged = false;
+        }
+
+        startTimer();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        stoptimertask();
+    }
+
+    private void initialisePrefs() {
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        UDP_SERVER_PORT = Integer.parseInt(SP.getString("udpPort", "10110"));
+        boolean bAwake = SP.getBoolean("disableSleep", false);
+        if (bAwake) getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        initialiseCases();
+    }
+
+    public void startTimer() {
+        //set a new Timer
+        timer = new Timer();
+
+        //initialize the TimerTask's job
+        initializeTimerTask();
+
+        //schedule the timer, after the first 1000ms the TimerTask will run every 1000ms
+        timer.schedule(timerTask, 1000, 1000);
+    }
+
+    public void stoptimertask() {
+        //stop the timer, if it's not already null
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
+    public void initialiseCases() {
+
+        String[] parts;
 
         parts = SP.getString("1", "BOAT SPEED;kn;mbsp").split(";");
         tvLabel[1].setText(parts[0]); tvRight[1].setText(parts[1]); tvVar[1] = parts[2];
@@ -250,10 +256,11 @@ public class MainActivity extends Activity {
         return twoDForm.format(f);
     }
 
-    int count = -5;
+    int count = 30;
     private void test() {
+        Random rand = new Random();
 
-        if (count > 10) count = -5;
+        if (count > 50) count = 30;
         map.put("mbsp", "4.23");
         map.put("mpopt", "103");
         map.put("mcible", "4.14");
@@ -267,24 +274,25 @@ public class MainActivity extends Activity {
         mstddev = "1.20 m";
         UpdateCellColor(stddev, Color.GREEN);
         UpdateCellColor(sats, Color.GREEN);
-        mcog = 50;
-        mhdgf = 53 - count;
+        mhdgf = rand.nextInt(20) + 39;
         mhdg = String.valueOf((int)mhdgf);
-        mdopt = 43;
+        mcog = mhdgf - 4;
+        mdopt = 40;
         map.put("mdopt", String.valueOf((int)mdopt));
-        mtwa = 43 + count;
+        mtwa = rand.nextInt(15) + 37;
         map.put("mtwa", String.valueOf((int)mtwa));
         mtwd = mhdgf + mtwa;
+        map.put("mtwd", String.valueOf((int)mtwd));
         if (mtwd >= 360) mtwd -= 360;
         map.put("mtwd", String.valueOf((int)mtwd));
         mcapwp = 70;
         mset = 0;
         mdrift = "0.2";
-        mawa = 30;
+        mawa = mtwa - 10;
         map.put("mawa", String.valueOf((int)mawa));
-        twd10mn.update(String.valueOf(mtwd - 7));
-        twd10mn.update(String.valueOf(mtwd + 8));
-        count++;
+        twd10mn.update(String.valueOf(mtwd));
+        //twd10mn.update(String.valueOf(mtwd + 8));
+        count ++;
     }
 
     @Override
@@ -338,12 +346,13 @@ public class MainActivity extends Activity {
         }
 
         private void rotate(Float bearing) {
-            if (bearing != null) {
+            if ((bearing != null) && (bearing != currentAngle)) {
                 RotateAnimation ra = new RotateAnimation(currentAngle, bearing,
                         Animation.RELATIVE_TO_SELF, 0.5f,
                         Animation.RELATIVE_TO_SELF, 0.5f);
                 ra.setFillAfter(true); //make the arrow stay at its destination (after rotation)
-                ra.setDuration(1000);
+                ra.setDuration(raTime);
+                ra.restrictDuration(raTime);
                 ra.setInterpolator(li);
                 iv.startAnimation(ra);
                 currentAngle = bearing;
@@ -356,12 +365,11 @@ public class MainActivity extends Activity {
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                //view.setBackgroundColor((Integer)valueAnimator.getAnimatedValue());
                 imageTWA.setImageTintList(ColorStateList.valueOf((Integer)valueAnimator.getAnimatedValue()));
             }
         });
 
-        anim.setDuration(1000);
+        anim.setDuration(raTime);
         anim.start();
         curTWAColor = newTWAColor;
     }
@@ -391,7 +399,7 @@ public class MainActivity extends Activity {
         else if (offset ==  9) teinte = "#001ae5";
         else if (offset >= 10) teinte = "#0000ff"; // bleu
 
-        setColorAnim(teinte);
+        if (!teinte.equals(curTWAColor)) setColorAnim(teinte);
     }
 
     private class LaylineView extends View {
@@ -553,11 +561,9 @@ public class MainActivity extends Activity {
             }
         }
 
-/*
         public void kill() {
             bKeepRunning = false;
         }
-*/
 
         // Traitement d'un paquet UDP reçu
         private void parseNMEA(String str) {
