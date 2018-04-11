@@ -29,6 +29,32 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
+        android:id="@+id/ivLLB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_layline1080"
+        android:tint="#ff0000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_compas1080"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivLLT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_layline1080"
+        android:tint="#00ff00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_compas1080"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
         android:id="@+id/ivCompas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

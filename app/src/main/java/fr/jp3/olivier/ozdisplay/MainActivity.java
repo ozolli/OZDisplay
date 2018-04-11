@@ -67,12 +67,12 @@ public class MainActivity extends Activity {
     SharedPreferences SP;
     public static boolean prefsChanged = false;
 
-    // Variables laylines
-    private float leftLLangle, rightLLangle, minLeftLLangle, maxLeftLLangle, minRightLLangle, maxRightLLangle;
+    // Variables historique laylines
+    private float minLeftLLangle, maxLeftLLangle, minRightLLangle, maxRightLLangle;
 
     // define the display assembly compass picture
-    private ImageView imageCompas, imageCOG, imageSET, imageWP, imageTWA, imageAWA, imageT, imageLL;
-    private RotateAnim raCompas, raCOG, raSET, raWP, raTWA, raAWA, raT, raLL;
+    private ImageView imageCompas, imageCOG, imageSET, imageWP, imageTWA, imageAWA, imageT, imageLL, imageLLB, imageLLT;
+    private RotateAnim raCompas, raCOG, raSET, raWP, raTWA, raAWA, raT, raLL, raLLB, raLLT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +90,8 @@ public class MainActivity extends Activity {
         imageAWA    = (ImageView) findViewById(R.id.ivAWA);
         imageT      = (ImageView) findViewById(R.id.ivT);
         imageLL     = (ImageView) findViewById(R.id.ivLL);
+        imageLLB    = (ImageView) findViewById(R.id.ivLLB);
+        imageLLT    = (ImageView) findViewById(R.id.ivLLT);
 
         raCompas    = new RotateAnim(imageCompas);
         raCOG       = new RotateAnim(imageCOG);
@@ -99,6 +101,8 @@ public class MainActivity extends Activity {
         raAWA       = new RotateAnim(imageAWA);
         raT         = new RotateAnim(imageT);
         raLL         = new RotateAnim(imageLL);
+        raLLB        = new RotateAnim(imageLLB);
+        raLLT        = new RotateAnim(imageLLT);
 
         hdg         = (TextView) findViewById(R.id.tvHDG);
         drift       = (TextView) findViewById(R.id.tvDrift);
@@ -313,15 +317,15 @@ public class MainActivity extends Activity {
         raWP.rotate(mcapwp - mhdgf);
         raTWA.rotate(mtwa);
         raT.rotate(mtwa);
+        raLLB.rotate(mtwd + mdopt - mhdgf);
+        raLLT.rotate(mtwd - mdopt - mhdgf);
         raAWA.rotate(mawa);
 
         // Colorisation TWA
         setTWAcolor();
 
-        // Dessin des laylines
+        // Dessin de l'historique des laylines
         twd10mn.calculMinMax();
-        leftLLangle = mtwd + mdopt;
-        rightLLangle = mtwd - mdopt;
         minLeftLLangle = twd10mn.getMin() + mdopt;
         maxLeftLLangle = twd10mn.getMax() + mdopt;
         minRightLLangle = twd10mn.getMin() - mdopt;
@@ -440,27 +444,19 @@ public class MainActivity extends Activity {
             canvas.drawRect(0, 0, width, height, pBackground);
             oval.set(0, 0, radius * 2, radius * 2);
 
-            // Moyenne babord
+            // Historique babord
             paint.setColor(Color.RED);
             paint.setAlpha(0xAA);
             sweep = maxLeftLLangle - minLeftLLangle;
             if (sweep < 0 ) sweep += 360;
             canvas.drawArc(oval, minLeftLLangle - 90, sweep, true, paint);
 
-            // Layline babord
-            paint.setAlpha(0xFF);
-            canvas.drawArc(oval, leftLLangle - 90.5f, 1, true, paint);
-
-            // Moyenne tribord
+            // Historisue tribord
             paint.setColor(Color.GREEN);
             paint.setAlpha(0xAA);
             sweep = maxRightLLangle - minRightLLangle;
             if (sweep < 0 ) sweep += 360;
             canvas.drawArc(oval, minRightLLangle - 90, sweep, true, paint);
-
-            // Layline tribord
-            paint.setAlpha(0xFF);
-            canvas.drawArc(oval, rightLLangle -90.5f, 1, true, paint);
         }
     }
 

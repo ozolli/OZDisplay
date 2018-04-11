@@ -61,7 +61,6 @@ public class UserSettingActivity extends PreferenceActivity {
             MainActivity.prefsChanged = true;
             if (key.equals("udpPort")) {
                 EditTextPreference etp = (EditTextPreference) findPreference("udpPort");
-                //etp.setSummary("dummy");
                 etp.setSummary("Numéro de port UDP du serveur wifi NMEA : "
                         + getPreferenceManager().getSharedPreferences().getString("udpPort", "10110"));
             }
